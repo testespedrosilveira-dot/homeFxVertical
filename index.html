@@ -1,117 +1,127 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
+
 <style>
 html,body{
-margin:0;
-height:100%;
-overflow:hidden;
-background:#fff;
-font-family:Arial,Helvetica,sans-serif;
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#fff;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 .stage{
-position:relative;
-width:100vw;
-height:100vh;
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
 }
 
 .slide{
-position:absolute;
-left:50%;
-top:50%;
-width:500px;
-aspect-ratio:1;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:430px;
-font-weight:400;
-color:#c3c3c3;
-transition:.45s cubic-bezier(.22,.61,.36,1),opacity .35s;
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:500px;
+    aspect-ratio:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:430px;
+    font-weight:400;
+    color:#c3c3c3;
+    transform:translate(-50%,-50%);
+    transition:
+        transform .45s cubic-bezier(.22,.61,.36,1),
+        opacity .35s;
+    will-change:transform;
 }
 
 .center{
-position:absolute;
-left:50%;
-top:50%;
-transform:translate(-50%,-50%);
-width:420px;
-aspect-ratio:1;
-background:#b3b3b3;
-border:12px solid #fff;
-z-index:10;
-transition:background .25s;
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:420px;
+    aspect-ratio:1;
+    background:#b3b3b3;
+    border:12px solid #fff;
+    z-index:10;
+    transition:background .25s;
 }
 </style>
-</head>
 
+</head>
 <body>
 
 <div class="stage">
-<div id="t"></div>
-<div id="b" class="center"></div>
+    <div id="t"></div>
+    <div id="b" class="center"></div>
 </div>
 
 <script>
 
 const chars=["P","P","P","S","S"];
+
 const SIDE=.52;
-const STEP=Math.min(window.innerHeight*.58,570);
+
+// distância entre as posições (proporcional à tela)
+const STEP=window.innerHeight*.42;
 
 const slides=chars.map(c=>{
-let d=document.createElement("div");
-d.className="slide";
-d.textContent=c;
-t.appendChild(d);
-return d;
+    const d=document.createElement("div");
+    d.className="slide";
+    d.textContent=c;
+    t.appendChild(d);
+    return d;
 });
 
 let cur=0;
 
-const col=()=>`hsl(${Math.random()*360},90%,55%)`;
+const color=()=>`hsl(${Math.random()*360},90%,55%)`;
 
 function render(){
 
-slides.forEach((s,i)=>{
+    slides.forEach((slide,i)=>{
 
-let diff=i-cur;
+        let diff=i-cur;
 
-if(diff>2.5)diff-=5;
-if(diff<-2.5)diff+=5;
+        if(diff>chars.length/2) diff-=chars.length;
+        if(diff<-chars.length/2) diff+=chars.length;
 
-let scale=SIDE;
-let opacity=0;
-let z=1;
+        let scale=SIDE;
+        let opacity=0;
+        let z=1;
 
-if(diff===0){
-scale=1;
-opacity=1;
-z=3;
-}else if(Math.abs(diff)===1){
-opacity=.82;
-z=2;
-}
+        if(diff===0){
+            scale=1;
+            opacity=1;
+            z=3;
+        }else if(Math.abs(diff)===1){
+            opacity=.82;
+            z=2;
+        }
 
-s.style.opacity=opacity;
-s.style.zIndex=z;
+        slide.style.opacity=opacity;
+        slide.style.zIndex=z;
 
-s.style.transform=
-`translate(-50%,-50%)
- translate(0,${diff*STEP}px)
- scale(${scale})`;
+        slide.style.transform=
+        `translate(-50%,-50%)
+         translateY(${diff*STEP}px)
+         scale(${scale})`;
 
-});
+    });
 
 }
 
 render();
 
 setInterval(()=>{
-cur=(cur+1)%chars.length;
-b.style.background=col();
-render();
+    cur=(cur+1)%chars.length;
+    b.style.background=color();
+    render();
 },1000);
 
 </script>
