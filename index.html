@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 
 <style>
+
 html,body{
     margin:0;
     width:100%;
@@ -20,17 +21,20 @@ html,body{
     overflow:hidden;
 }
 
+/* LETTERS */
+
 .slide{
     position:absolute;
     left:50%;
     top:50%;
-    width:250px;
-    aspect-ratio:1;
+    width:180px;
+    height:180px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:215px;
+    font-size:170px;
     font-weight:400;
+    line-height:1;
     color:#c3c3c3;
     transform:translate(-50%,-50%);
     transition:
@@ -39,15 +43,17 @@ html,body{
     will-change:transform;
 }
 
+/* CENTER BOX */
+
 .center{
     position:absolute;
     left:50%;
     top:50%;
+    width:165px;
+    height:165px;
     transform:translate(-50%,-50%);
-    width:210px;
-    aspect-ratio:1;
     background:#b3b3b3;
-    border:6px solid #fff;
+    border:5px solid #fff;
     z-index:10;
     transition:background .25s;
 }
@@ -58,18 +64,19 @@ html,body{
 <body>
 
 <div class="stage">
+
     <div id="t"></div>
+
     <div id="b" class="center"></div>
+
 </div>
 
 <script>
 
 const chars=["P","P","P","S","S"];
 
+const STEP=210;
 const SIDE=.52;
-
-// distância vertical entre os itens
-const STEP=window.innerHeight*.38;
 
 const slides=chars.map(c=>{
     const d=document.createElement("div");
@@ -81,16 +88,16 @@ const slides=chars.map(c=>{
 
 let cur=0;
 
-const randomColor=()=>`hsl(${Math.random()*360},90%,55%)`;
+const color=()=>`hsl(${Math.random()*360},90%,55%)`;
 
 function render(){
 
-    slides.forEach((slide,i)=>{
+    slides.forEach((s,i)=>{
 
         let diff=i-cur;
 
-        if(diff>chars.length/2) diff-=chars.length;
-        if(diff<-chars.length/2) diff+=chars.length;
+        if(diff>2.5) diff-=5;
+        if(diff<-2.5) diff+=5;
 
         let scale=SIDE;
         let opacity=0;
@@ -100,19 +107,19 @@ function render(){
             scale=1;
             opacity=1;
             z=3;
-        }else if(Math.abs(diff)===1){
+        }
+        else if(Math.abs(diff)===1){
             opacity=.82;
             z=2;
         }
 
-        slide.style.opacity=opacity;
-        slide.style.zIndex=z;
+        s.style.opacity=opacity;
+        s.style.zIndex=z;
 
-        slide.style.transform=`
-            translate(-50%,-50%)
-            translateY(${diff*STEP}px)
-            scale(${scale})
-        `;
+        s.style.transform=
+        `translate(-50%,-50%)
+         translateY(${diff*STEP}px)
+         scale(${scale})`;
 
     });
 
@@ -121,14 +128,14 @@ function render(){
 render();
 
 setInterval(()=>{
-    cur=(cur+1)%chars.length;
-    b.style.background=randomColor();
-    render();
-},1000);
 
-window.addEventListener("resize",()=>{
+    cur=(cur+1)%chars.length;
+
+    b.style.background=color();
+
     render();
-});
+
+},1000);
 
 </script>
 
