@@ -24,12 +24,12 @@ html,body{
     position:absolute;
     left:50%;
     top:50%;
-    width:500px;
+    width:250px;
     aspect-ratio:1;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:430px;
+    font-size:215px;
     font-weight:400;
     color:#c3c3c3;
     transform:translate(-50%,-50%);
@@ -44,16 +44,17 @@ html,body{
     left:50%;
     top:50%;
     transform:translate(-50%,-50%);
-    width:420px;
+    width:210px;
     aspect-ratio:1;
     background:#b3b3b3;
-    border:12px solid #fff;
+    border:6px solid #fff;
     z-index:10;
     transition:background .25s;
 }
-</style>
 
+</style>
 </head>
+
 <body>
 
 <div class="stage">
@@ -67,8 +68,8 @@ const chars=["P","P","P","S","S"];
 
 const SIDE=.52;
 
-// distância entre as posições (proporcional à tela)
-const STEP=window.innerHeight*.42;
+// distância vertical entre os itens
+const STEP=window.innerHeight*.38;
 
 const slides=chars.map(c=>{
     const d=document.createElement("div");
@@ -80,7 +81,7 @@ const slides=chars.map(c=>{
 
 let cur=0;
 
-const color=()=>`hsl(${Math.random()*360},90%,55%)`;
+const randomColor=()=>`hsl(${Math.random()*360},90%,55%)`;
 
 function render(){
 
@@ -107,10 +108,11 @@ function render(){
         slide.style.opacity=opacity;
         slide.style.zIndex=z;
 
-        slide.style.transform=
-        `translate(-50%,-50%)
-         translateY(${diff*STEP}px)
-         scale(${scale})`;
+        slide.style.transform=`
+            translate(-50%,-50%)
+            translateY(${diff*STEP}px)
+            scale(${scale})
+        `;
 
     });
 
@@ -120,9 +122,13 @@ render();
 
 setInterval(()=>{
     cur=(cur+1)%chars.length;
-    b.style.background=color();
+    b.style.background=randomColor();
     render();
 },1000);
+
+window.addEventListener("resize",()=>{
+    render();
+});
 
 </script>
 
