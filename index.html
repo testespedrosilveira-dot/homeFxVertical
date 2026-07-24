@@ -56,21 +56,14 @@ transition:background .25s;
 
 <script>
 
-const items=[
-{char:"P",x:-280},
-{char:"P",x:190},
-{char:"P",x:-120},
-{char:"S",x:250},
-{char:"S",x:-220}
-];
-
+const chars=["P","P","P","S","S"];
 const SIDE=.52;
-const STEP=570;
+const STEP=Math.min(window.innerHeight*.58,570);
 
-const slides=items.map(v=>{
+const slides=chars.map(c=>{
 let d=document.createElement("div");
 d.className="slide";
-d.textContent=v.char;
+d.textContent=c;
 t.appendChild(d);
 return d;
 });
@@ -79,7 +72,7 @@ let cur=0;
 
 const col=()=>`hsl(${Math.random()*360},90%,55%)`;
 
-function r(){
+function render(){
 
 slides.forEach((s,i)=>{
 
@@ -88,36 +81,37 @@ let diff=i-cur;
 if(diff>2.5)diff-=5;
 if(diff<-2.5)diff+=5;
 
-let sc=SIDE,o=0,z=1;
+let scale=SIDE;
+let opacity=0;
+let z=1;
 
 if(diff===0){
-sc=1;
-o=1;
+scale=1;
+opacity=1;
 z=3;
-}
-else if(Math.abs(diff)===1){
-o=.82;
+}else if(Math.abs(diff)===1){
+opacity=.82;
 z=2;
 }
 
-s.style.opacity=o;
+s.style.opacity=opacity;
 s.style.zIndex=z;
 
 s.style.transform=
 `translate(-50%,-50%)
- translate(${items[i].x}px,${diff*STEP}px)
- scale(${sc})`;
+ translate(0,${diff*STEP}px)
+ scale(${scale})`;
 
 });
 
 }
 
-r();
+render();
 
 setInterval(()=>{
-cur=(cur+1)%5;
+cur=(cur+1)%chars.length;
 b.style.background=col();
-r();
+render();
 },1000);
 
 </script>
