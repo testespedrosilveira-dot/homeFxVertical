@@ -56,14 +56,21 @@ transition:background .25s;
 
 <script>
 
-const chars=["P","P","P","S","S"],
-SIDE=.52,
-STEP=570;
+const items=[
+{char:"P",x:-280},
+{char:"P",x:190},
+{char:"P",x:-120},
+{char:"S",x:250},
+{char:"S",x:-220}
+];
 
-const slides=chars.map(c=>{
+const SIDE=.52;
+const STEP=570;
+
+const slides=items.map(v=>{
 let d=document.createElement("div");
 d.className="slide";
-d.textContent=c;
+d.textContent=v.char;
 t.appendChild(d);
 return d;
 });
@@ -78,12 +85,10 @@ slides.forEach((s,i)=>{
 
 let diff=i-cur;
 
-if(diff>2.5) diff-=5;
-if(diff<-2.5) diff+=5;
+if(diff>2.5)diff-=5;
+if(diff<-2.5)diff+=5;
 
-let sc=SIDE,
-o=0,
-z=1;
+let sc=SIDE,o=0,z=1;
 
 if(diff===0){
 sc=1;
@@ -100,7 +105,7 @@ s.style.zIndex=z;
 
 s.style.transform=
 `translate(-50%,-50%)
- translate(0,${diff*STEP}px)
+ translate(${items[i].x}px,${diff*STEP}px)
  scale(${sc})`;
 
 });
