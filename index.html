@@ -64,11 +64,8 @@ html,body{
 <body>
 
 <div class="stage">
-
     <div id="t"></div>
-
     <div id="b" class="center"></div>
-
 </div>
 
 <script>
@@ -136,6 +133,30 @@ setInterval(()=>{
     render();
 
 },1000);
+
+
+// ---------- REDIRECT ----------
+
+const destination = "https://p-silveira.com/collection/";
+let redirected = false;
+
+function go(){
+    if(redirected) return;
+    redirected = true;
+    window.location.assign(destination);
+}
+
+[
+    "click",
+    "touchstart",
+    "touchmove",
+    "pointerdown",
+    "mousedown",
+    "wheel",
+    "keydown"
+].forEach(evt=>{
+    window.addEventListener(evt, go, {passive:true});
+});
 
 </script>
 
